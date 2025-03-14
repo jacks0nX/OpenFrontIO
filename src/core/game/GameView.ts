@@ -164,6 +164,9 @@ export class PlayerView {
   id(): PlayerID {
     return this.data.id;
   }
+  teamID(): number {
+    return this.data.teamID;
+  }
   type(): PlayerType {
     return this.data.playerType;
   }

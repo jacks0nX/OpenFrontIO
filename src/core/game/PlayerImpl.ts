@@ -19,6 +19,7 @@ import {
   PlayerProfile,
   Attack,
   UnitSpecificInfos,
+  Team,
 } from "./Game";
 import { AttackUpdate, PlayerUpdate } from "./GameUpdates";
 import { GameUpdateType } from "./GameUpdates";
@@ -99,6 +100,7 @@ export class PlayerImpl implements Player {
     private _smallID: number,
     private readonly playerInfo: PlayerInfo,
     startTroops: number,
+    private _team: Team | null,
   ) {
     this._flag = playerInfo.flag;
     this._name = playerInfo.name;
@@ -124,6 +126,7 @@ export class PlayerImpl implements Player {
       name: this.name(),
       displayName: this.displayName(),
       id: this.id(),
+      teamID: this.team()?.id,
       smallID: this.smallID(),
       playerType: this.type(),
       isAlive: this.isAlive(),
@@ -557,6 +560,17 @@ export class PlayerImpl implements Player {
     return this.mg
       .players()
       .filter((other) => other != this && this.canTrade(other));
+  }
+
+  team(): Team | null {
+    return this._team;
+  }
+
+  sameTeam(other: Player): boolean {
+    if (this.team() == null || other.team() == null) {
+      return false;
+    }
+    return this._team == other.team();
   }
 
   gold(): Gold {

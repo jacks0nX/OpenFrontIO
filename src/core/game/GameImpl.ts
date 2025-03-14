@@ -16,6 +16,8 @@ import {
   GameUpdates,
   TerrainType,
   EmojiMessage,
+  Team,
+  GameMode,
 } from "./Game";
 import { GameUpdate } from "./GameUpdates";
 import { GameUpdateType } from "./GameUpdates";
@@ -32,6 +34,7 @@ import { GameMap, GameMapImpl, TileRef, TileUpdate } from "./GameMap";
 import { DefenseGrid } from "./DefensePostGrid";
 import { StatsImpl } from "./StatsImpl";
 import { Stats } from "./Stats";
+import { simpleHash } from "../Util";
 
 export function createGame(
   gameMap: GameMap,
@@ -70,6 +73,8 @@ export class GameImpl implements Game {
 
   private _stats: StatsImpl = new StatsImpl();
 
+  private teams_: Team[] = [];
+
   constructor(
     private _map: GameMap,
     private miniGameMap: GameMap,
@@ -92,6 +97,9 @@ export class GameImpl implements Game {
       this._map,
       this._config.defensePostRange(),
     );
+    if (this._config.gameConfig().gameMode == GameMode.Team) {
+      this.teams_ = [{ id: 0 }, { id: 1 }];
+    }
   }
   isOnEdgeOfMap(ref: TileRef): boolean {
     return this._map.isOnEdgeOfMap(ref);
@@ -325,11 +333,20 @@ export class GameImpl implements Game {
       this.nextPlayerID,
       playerInfo,
       manpower,
+      this.maybeAssignTeam(playerInfo),
     );
     this._playersBySmallID.push(player);
     this.nextPlayerID++;
     this._players.set(playerInfo.id, player);
     return player;
+  }
+
+  private maybeAssignTeam(player: PlayerInfo): Team | null {
+    if (this._config.gameConfig().gameMode != GameMode.Team) {
+      return null;
+    }
+    const rand = simpleHash(player.id);
+    return this.teams_[rand % this.teams_.length];
   }
 
   player(id: PlayerID | null): Player {
@@ -522,6 +539,10 @@ export class GameImpl implements Game {
       winnerID: winner.smallID(),
       allPlayersStats,
     });
+  }
+
+  teams(): Team[] {
+    return this.teams_;
   }
 
   displayMessage(

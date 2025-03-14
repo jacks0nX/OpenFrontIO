@@ -92,6 +92,7 @@ export interface PlayerUpdate {
   name: string;
   displayName: string;
   id: PlayerID;
+  teamID?: number;
   smallID: number;
   playerType: PlayerType;
   isAlive: boolean;

@@ -160,7 +160,7 @@ export class StructureLayer implements Layer {
         new Cell(this.game.x(tile), this.game.y(tile)),
         unit.type() == UnitType.Construction
           ? underConstructionColor
-          : this.theme.borderColor(unit.owner().info()),
+          : this.theme.borderColor(unit.owner()),
         255,
       );
     }
@@ -173,7 +173,7 @@ export class StructureLayer implements Layer {
         new Cell(this.game.x(tile), this.game.y(tile)),
         unit.type() == UnitType.Construction
           ? underConstructionColor
-          : this.theme.territoryColor(unit.owner().info()),
+          : this.theme.territoryColor(unit.owner()),
         130,
       );
     }
@@ -192,7 +192,7 @@ export class StructureLayer implements Layer {
     height: number,
     unit: UnitView,
   ) {
-    let color = this.theme.borderColor(unit.owner().info());
+    let color = this.theme.borderColor(unit.owner());
     if (unit.type() == UnitType.Construction) {
       color = underConstructionColor;
     }

@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { Difficulty, GameMapType, GameType } from "../core/game/Game";
+import { Difficulty, GameMapType, GameMode, GameType } from "../core/game/Game";
 import { generateID as generateID } from "../core/Util";
 import { consolex } from "../core/Consolex";
 import "./components/Difficulties";
@@ -488,6 +488,7 @@ export class SinglePlayerModal extends LitElement {
           gameConfig: {
             gameMap: this.selectedMap,
             gameType: GameType.Singleplayer,
+            gameMode: GameMode.Team,
             difficulty: this.selectedDifficulty,
             disableNPCs: this.disableNPCs,
             bots: this.bots,

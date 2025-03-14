@@ -58,6 +58,15 @@ export enum GameType {
   Private = "Private",
 }
 
+export enum GameMode {
+  FFA = "Free For All",
+  Team = "Team",
+}
+
+export interface Team {
+  id: number;
+}
+
 export interface UnitInfo {
   cost: (player: Player | PlayerView) => Gold;
   // Determines if its owner changes when its tile is conquered.
@@ -91,6 +100,7 @@ export const nukeTypes = [
   UnitType.MIRVWarhead,
   UnitType.MIRV,
 ] as UnitType[];
+
 export type NukeType = (typeof nukeTypes)[number];
 
 export enum Relation {
@@ -316,6 +326,8 @@ export interface Player {
   allRelationsSorted(): { player: Player; relation: Relation }[];
   updateRelation(other: Player, delta: number): void;
   decayRelations(): void;
+  team(): Team | null;
+  sameTeam(other: Player): boolean;
 
   // Alliances
   incomingAllianceRequests(): AllianceRequest[];
@@ -388,6 +400,8 @@ export interface Game extends GameMap {
   addPlayer(playerInfo: PlayerInfo, manpower: number): Player;
   terraNullius(): TerraNullius;
   owner(ref: TileRef): Player | TerraNullius;
+
+  teams(): Team[];
 
   // Game State
   ticks(): Tick;
