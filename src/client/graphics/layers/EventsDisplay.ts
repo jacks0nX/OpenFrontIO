@@ -531,6 +531,16 @@ export class EventsDisplay extends LitElement implements Layer {
   }
 
   render() {
+    if (
+      this.events.length === 0 &&
+      this.incomingAttacks.length === 0 &&
+      this.outgoingAttacks.length === 0 &&
+      this.outgoingLandAttacks.length === 0 &&
+      this.outgoingBoats.length === 0
+    ) {
+      return html``;
+    }
+    
     this.events.sort((a, b) => {
       const aPrior = a.priority ?? 100000;
       const bPrior = b.priority ?? 100000;
